@@ -80,7 +80,7 @@ if ($Compile) {
     Write-Verbose "Building the launcher..."
 
     # Reference: https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-    msbuild CmderLauncher.vcxproj /t:Clean,Build /p:configuration=Release /m /O3 /fp:fast /p:CL_MPCount=3
+    msbuild CmderLauncher.vcxproj /t:Clean,Build /p:configuration=Release /m /O2 /fp:fast /p:CL_MPCount=3
 
     if ($LastExitCode -ne 0) {
         throw "MSBuild failed to build the launcher executable."
