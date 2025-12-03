@@ -264,143 +264,143 @@ void StartCmder(std::wstring  path = L"", bool is_single_mode = false, std::wstr
 	// Set path to Cmder user ConEmu config file
 	PathCombine(userCfgPath, userConfigDirPath, L"user-ConEmu.xml");
 
-	if ( PathFileExists(cpuCfgPath) || use_user_cfg == false ) // config/ConEmu-%COMPUTERNAME%.xml file exists or /m was specified on command line, use machine specific config.
-	{
-		if (cfgRoot.length() == 0) // '/c [path]' was NOT specified
-		{
-			if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml file exists, copy vendor/conemu-maximus5/ConEmu.xml to config/ConEmu-%COMPUTERNAME%.xml.
-			{
-				if (!CopyFile(cfgPath, cpuCfgPath, FALSE))
-				{
-					MessageBox(NULL,
-						(GetLastError() == ERROR_ACCESS_DENIED)
-						? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/ConEmu-%COMPUTERNAME%.xml! Access Denied."
-						: L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/ConEmu-%COMPUTERNAME%.xml!", MB_TITLE, MB_ICONSTOP);
-					exit(1);
-				}
-			}
-			else // vendor/conemu-maximus5/ConEmu.xml config file does not exist, copy config/ConEmu-%COMPUTERNAME%.xml to vendor/conemu-maximus5/ConEmu.xml file
-			{
-				if (!CopyFile(cpuCfgPath, cfgPath, FALSE))
-				{
-					MessageBox(NULL,
-						(GetLastError() == ERROR_ACCESS_DENIED)
-						? L"Failed to copy config/ConEmu-%COMPUTERNAME%.xml file to vendor/conemu-maximus5/ConEmu.xml! Access Denied."
-						: L"Failed to copy config/ConEmu-%COMPUTERNAME%.xml file to vendor/conemu-maximus5/ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
-					exit(1);
-				}
-			}
-		}
-		else // '/c [path]' was specified, don't copy anything and use existing conemu-%COMPUTERNAME%.xml to start comemu.
-		{
-			if (use_user_cfg == false && PathFileExists(cfgPath) && !PathFileExists(cpuCfgPath)) // vendor/conemu-maximus5/ConEmu.xml file exists, copy vendor/conemu-maximus5/ConEmu.xml to config/ConEmu-%COMPUTERNAME%.xml.
-			{
-				if (!CopyFile(cfgPath, cpuCfgPath, FALSE))
-				{
-					MessageBox(NULL,
-						(GetLastError() == ERROR_ACCESS_DENIED)
-						? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/ConEmu-%COMPUTERNAME%.xml! Access Denied."
-						: L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/ConEmu-%COMPUTERNAME%.xml!", MB_TITLE, MB_ICONSTOP);
-					exit(1);
-				}
-			}
+	// if ( PathFileExists(cpuCfgPath) || use_user_cfg == false ) // config/ConEmu-%COMPUTERNAME%.xml file exists or /m was specified on command line, use machine specific config.
+	// {
+		// if (cfgRoot.length() == 0) // '/c [path]' was NOT specified
+		// {
+			// if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml file exists, copy vendor/conemu-maximus5/ConEmu.xml to config/ConEmu-%COMPUTERNAME%.xml.
+			// {
+				// if (!CopyFile(cfgPath, cpuCfgPath, FALSE))
+				// {
+					// MessageBox(NULL,
+						// (GetLastError() == ERROR_ACCESS_DENIED)
+						// ? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/ConEmu-%COMPUTERNAME%.xml! Access Denied."
+						// : L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/ConEmu-%COMPUTERNAME%.xml!", MB_TITLE, MB_ICONSTOP);
+					// exit(1);
+				// }
+			// }
+			// else // vendor/conemu-maximus5/ConEmu.xml config file does not exist, copy config/ConEmu-%COMPUTERNAME%.xml to vendor/conemu-maximus5/ConEmu.xml file
+			// {
+				// if (!CopyFile(cpuCfgPath, cfgPath, FALSE))
+				// {
+					// MessageBox(NULL,
+						// (GetLastError() == ERROR_ACCESS_DENIED)
+						// ? L"Failed to copy config/ConEmu-%COMPUTERNAME%.xml file to vendor/conemu-maximus5/ConEmu.xml! Access Denied."
+						// : L"Failed to copy config/ConEmu-%COMPUTERNAME%.xml file to vendor/conemu-maximus5/ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
+					// exit(1);
+				// }
+			// }
+		// }
+		// else // '/c [path]' was specified, don't copy anything and use existing conemu-%COMPUTERNAME%.xml to start comemu.
+		// {
+			// if (use_user_cfg == false && PathFileExists(cfgPath) && !PathFileExists(cpuCfgPath)) // vendor/conemu-maximus5/ConEmu.xml file exists, copy vendor/conemu-maximus5/ConEmu.xml to config/ConEmu-%COMPUTERNAME%.xml.
+			// {
+				// if (!CopyFile(cfgPath, cpuCfgPath, FALSE))
+				// {
+					// MessageBox(NULL,
+						// (GetLastError() == ERROR_ACCESS_DENIED)
+						// ? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/ConEmu-%COMPUTERNAME%.xml! Access Denied."
+						// : L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/ConEmu-%COMPUTERNAME%.xml!", MB_TITLE, MB_ICONSTOP);
+					// exit(1);
+				// }
+			// }
 
-			PathCombine(userConEmuCfgPath, userConfigDirPath, L"ConEmu-%COMPUTERNAME%.xml");
-			ExpandEnvironmentStrings(userConEmuCfgPath, userConEmuCfgPath, sizeof(userConEmuCfgPath) / sizeof(userConEmuCfgPath[0]));
-		}
-	}
-	else if (PathFileExists(userCfgPath)) // config/user_conemu.xml exists, use it.
-	{
-		if (cfgRoot.length() == 0) // '/c [path]' was NOT specified
-		{
-			if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml.
-			{
-				if (!CopyFile(cfgPath, userCfgPath, FALSE))
-				{
-					MessageBox(NULL,
-						(GetLastError() == ERROR_ACCESS_DENIED)
-						? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied."
-						: L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!", MB_TITLE, MB_ICONSTOP);
-					exit(1);
-				}
-			}
-			else // vendor/conemu-maximus5/ConEmu.xml does not exist, copy config/user-conemu.xml to vendor/conemu-maximus5/ConEmu.xml
-			{
-				if (!CopyFile(userCfgPath, cfgPath, FALSE))
-				{
-					MessageBox(NULL,
-						(GetLastError() == ERROR_ACCESS_DENIED)
-						? L"Failed to copy config/user-conemu.xml file to vendor/conemu-maximus5/ConEmu.xml! Access Denied."
-						: L"Failed to copy config/user-conemu.xml file to vendor/conemu-maximus5/ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
-					exit(1);
-				}
-			}
-		}
-		else // '/c [path]' was specified, don't copy anything and use existing user_conemu.xml to start comemu.
-		{
-			PathCombine(userConEmuCfgPath, userConfigDirPath, L"user-ConEmu.xml");
-		}
-	}
-	else if (cfgRoot.length() == 0) // '/c [path]' was NOT specified
-	{
-		if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml
-		{
-			if (!CopyFile(cfgPath, userCfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied."
-					: L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!", MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-			else // vendor/ConEmu.xml.default config exists, copy Cmder vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml.
-			{
-				if (!CopyFile(defaultCfgPath, cfgPath, FALSE))
-				{
-					MessageBox(NULL,
-						(GetLastError() == ERROR_ACCESS_DENIED)
-						? L"Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml! Access Denied."
-						: L"Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
-					exit(1);
-				}
-			}
-		}
-		else {
-			if (!CopyFile(defaultCfgPath, cfgPath, FALSE))
-			{
-				MessageBox(NULL,
-					(GetLastError() == ERROR_ACCESS_DENIED)
-					? L"Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml! Access Denied."
-					: L"Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
-				exit(1);
-			}
-		}
-	}
-	else if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml
-	{
-		if (!CopyFile(cfgPath, userCfgPath, FALSE))
-		{
-			MessageBox(NULL,
-				(GetLastError() == ERROR_ACCESS_DENIED)
-				? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied."
-				: L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!", MB_TITLE, MB_ICONSTOP);
-			exit(1);
-		}
+			// PathCombine(userConEmuCfgPath, userConfigDirPath, L"ConEmu-%COMPUTERNAME%.xml");
+			// ExpandEnvironmentStrings(userConEmuCfgPath, userConEmuCfgPath, sizeof(userConEmuCfgPath) / sizeof(userConEmuCfgPath[0]));
+		// }
+	// }
+	// else if (PathFileExists(userCfgPath)) // config/user_conemu.xml exists, use it.
+	// {
+		// if (cfgRoot.length() == 0) // '/c [path]' was NOT specified
+		// {
+			// if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml.
+			// {
+				// if (!CopyFile(cfgPath, userCfgPath, FALSE))
+				// {
+					// MessageBox(NULL,
+						// (GetLastError() == ERROR_ACCESS_DENIED)
+						// ? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied."
+						// : L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!", MB_TITLE, MB_ICONSTOP);
+					// exit(1);
+				// }
+			// }
+			// else // vendor/conemu-maximus5/ConEmu.xml does not exist, copy config/user-conemu.xml to vendor/conemu-maximus5/ConEmu.xml
+			// {
+				// if (!CopyFile(userCfgPath, cfgPath, FALSE))
+				// {
+					// MessageBox(NULL,
+						// (GetLastError() == ERROR_ACCESS_DENIED)
+						// ? L"Failed to copy config/user-conemu.xml file to vendor/conemu-maximus5/ConEmu.xml! Access Denied."
+						// : L"Failed to copy config/user-conemu.xml file to vendor/conemu-maximus5/ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
+					// exit(1);
+				// }
+			// }
+		// }
+		// else // '/c [path]' was specified, don't copy anything and use existing user_conemu.xml to start comemu.
+		// {
+			// PathCombine(userConEmuCfgPath, userConfigDirPath, L"user-ConEmu.xml");
+		// }
+	// }
+	// else if (cfgRoot.length() == 0) // '/c [path]' was NOT specified
+	// {
+		// if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml
+		// {
+			// if (!CopyFile(cfgPath, userCfgPath, FALSE))
+			// {
+				// MessageBox(NULL,
+					// (GetLastError() == ERROR_ACCESS_DENIED)
+					// ? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied."
+					// : L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!", MB_TITLE, MB_ICONSTOP);
+				// exit(1);
+			// }
+			// else // vendor/ConEmu.xml.default config exists, copy Cmder vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml.
+			// {
+				// if (!CopyFile(defaultCfgPath, cfgPath, FALSE))
+				// {
+					// MessageBox(NULL,
+						// (GetLastError() == ERROR_ACCESS_DENIED)
+						// ? L"Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml! Access Denied."
+						// : L"Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
+					// exit(1);
+				// }
+			// }
+		// }
+		// else {
+			// if (!CopyFile(defaultCfgPath, cfgPath, FALSE))
+			// {
+				// MessageBox(NULL,
+					// (GetLastError() == ERROR_ACCESS_DENIED)
+					// ? L"Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml! Access Denied."
+					// : L"Failed to copy vendor/ConEmu.xml.default file to vendor/conemu-maximus5/ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
+				// exit(1);
+			// }
+		// }
+	// }
+	// else if (PathFileExists(cfgPath)) // vendor/conemu-maximus5/ConEmu.xml exists, copy vendor/conemu-maximus5/ConEmu.xml to config/user_conemu.xml
+	// {
+		// if (!CopyFile(cfgPath, userCfgPath, FALSE))
+		// {
+			// MessageBox(NULL,
+				// (GetLastError() == ERROR_ACCESS_DENIED)
+				// ? L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml! Access Denied."
+				// : L"Failed to copy vendor/conemu-maximus5/ConEmu.xml file to config/user-conemu.xml!", MB_TITLE, MB_ICONSTOP);
+			// exit(1);
+		// }
 
-		PathCombine(userConEmuCfgPath, userConfigDirPath, L"user-ConEmu.xml");
-	}
-	else // '/c [path]' was specified and 'vendor/ConEmu.xml.default' config exists, copy Cmder 'vendor/ConEmu.xml.default' file to '[user specified path]/config/user_ConEmu.xml'.
-	{
-		if ( ! CopyFile(defaultCfgPath, userCfgPath, FALSE))
-		{
-			MessageBox(NULL,
-				(GetLastError() == ERROR_ACCESS_DENIED)
-				? L"Failed to copy vendor/ConEmu.xml.default file to [user specified path]/config/user_ConEmu.xml! Access Denied."
-				: L"Failed to copy vendor/ConEmu.xml.default file to [user specified path]/config/user_ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
-			exit(1);
-		}
-		PathCombine(userConEmuCfgPath, userConfigDirPath, L"user-ConEmu.xml");
-	}
+		// PathCombine(userConEmuCfgPath, userConfigDirPath, L"user-ConEmu.xml");
+	// }
+	// else // '/c [path]' was specified and 'vendor/ConEmu.xml.default' config exists, copy Cmder 'vendor/ConEmu.xml.default' file to '[user specified path]/config/user_ConEmu.xml'.
+	// {
+		// if ( ! CopyFile(defaultCfgPath, userCfgPath, FALSE))
+		// {
+			// MessageBox(NULL,
+				// (GetLastError() == ERROR_ACCESS_DENIED)
+				// ? L"Failed to copy vendor/ConEmu.xml.default file to [user specified path]/config/user_ConEmu.xml! Access Denied."
+				// : L"Failed to copy vendor/ConEmu.xml.default file to [user specified path]/config/user_ConEmu.xml!", MB_TITLE, MB_ICONSTOP);
+			// exit(1);
+		// }
+		// PathCombine(userConEmuCfgPath, userConfigDirPath, L"user-ConEmu.xml");
+	// }
 
 	SYSTEM_INFO sysInfo;
 	GetNativeSystemInfo(&sysInfo);
